@@ -1,6 +1,5 @@
 from csv import reader
-import operator
-from operator import truediv
+from csv import writer
 
 
 def carica_da_file(file_path):
@@ -33,10 +32,6 @@ def carica_da_file(file_path):
                 else:
 
                     album[anno].append(caratteristiche_foto)
-
-
-        for anno, foto in sorted(album.items()):
-            print(f'{anno}: {foto}')
         return album
 
     except FileNotFoundError:
@@ -49,7 +44,17 @@ def carica_da_file(file_path):
 
 def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
     """Aggiunge una foto all'album, creando l'anno al volo se non è ancora presente"""
-    if
+    anno_str = str(anno)
+    caratteristiche_foto = [codice, titolo, autore, mese]
+    if anno_str in album:
+        album[anno_str].append(caratteristiche_foto)
+    else:
+        album[anno_str] = [caratteristiche_foto]
+
+        with open(file_path,'a', newline='') as file_csv:
+            csvwriter = writer(file_csv)
+            riga = [codice,titolo,autore,mese,anno_str]
+            csvwriter.writerow(riga)
 
 
 def cerca_foto(album, codice):
@@ -68,7 +73,7 @@ def cerca_foto(album, codice):
                 trovato = False
 
         if trovato:
-            risultato = f"{','.join(caratteristiche_foto)},{anno}"
+            risultato = f"{', '.join(caratteristiche_foto)}, {anno}"
             break
 
         else:
@@ -113,7 +118,8 @@ def main():
 
                 if album is not None:
                     break
-            print(album)
+            for anno, foto in sorted(album.items()):
+                print(f'{anno}: {foto}')
 
         elif scelta == "2":
             if not album:
