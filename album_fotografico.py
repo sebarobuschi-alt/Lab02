@@ -1,32 +1,46 @@
 from csv import reader
 import operator
+from operator import truediv
+
+
 def carica_da_file(file_path):
     """Carica le foto dal file, creando un nuovo anno ogni volta che compare per la prima volta"""
+    album = {}
+    in_file_path = file_path
     try:
-        infile = open('album_fotografico.csv','r')
-        csvreader  = reader(infile)
+        # L'uso di 'with' è consigliato perché chiude il file in automatico
+        with open(file = in_file_path, mode = 'r') as infile:
+            csvreader = reader(infile)
+            next(csvreader, None)
+
+            for row in csvreader:
+
+                if not row:
+                    continue
+
+                codice = row[0]
+                titolo = row[1]
+                autore = row[2]
+                mese = row[3]
+                anno = row[4]
+
+                caratteristiche_foto = [codice, titolo, autore, mese]
+
+
+                if anno not in album:
+
+                    album[anno] = [caratteristiche_foto]
+                else:
+
+                    album[anno].append(caratteristiche_foto)
+
+
+        for anno, foto in sorted(album.items()):
+            print(f'{anno}: {foto}')
+        return album
+
     except FileNotFoundError:
-        print('None')
-    lista_anni = []
-    for row in csvreader:
-        codice = row[0]
-        titolo = row[1]
-        autore = row[2]
-        mese = row[3]
-        anno = row[4]
-        caratteristiche_foto = [codice,titolo,autore,mese]
-        foto = []
-        album_dic = {anno:foto}
-        if anno not in album_dic:
-            foto.append(caratteristiche_foto)
-            album_dic.update({anno:foto})
-
-
-        else:
-            foto.append(caratteristiche_foto)
-            album_dic[anno].append(foto)
-    for elemento in album_dic.items():
-        print(f'{elemento[0]}:{elemento[1]}')
+        print('File non trovato')
 
 
 
@@ -35,17 +49,47 @@ def carica_da_file(file_path):
 
 def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
     """Aggiunge una foto all'album, creando l'anno al volo se non è ancora presente"""
-
+    if
 
 
 def cerca_foto(album, codice):
     """Cerca una foto nell'album dato il codice"""
-    # TODO
+    lista_codici = []
+    for anno in album:
+        lista_foto = album[anno]
+        for i in range(len(lista_foto)):
+            caratteristiche_foto =  lista_foto[i]
+            codice_foto = caratteristiche_foto[0]
+            if codice== codice_foto:
 
+               trovato = True
+               break
+            else:
+                trovato = False
 
+        if trovato:
+            risultato = f"{','.join(caratteristiche_foto)},{anno}"
+            break
+
+        else:
+            risultato = None
+    return risultato
 def elenco_foto_anno_per_titolo(album, anno):
     """Ordina i titoli delle foto di un dato anno in ordine alfabetico"""
-    # TODO
+    titoli = []
+    anno_str = str(anno)
+    if anno_str  in album:
+        lista_foto = album[anno_str]
+        for i in range(len(lista_foto)):
+            caratteristiche_foto = lista_foto[i]
+            titolo = caratteristiche_foto[1]
+            titoli.append(titolo)
+        titoli_ordinati = sorted(titoli)
+
+    else:
+        titoli = None
+    return titoli_ordinati
+
 
 
 def main():
@@ -66,8 +110,10 @@ def main():
             while True:
                 file_path = input("Inserisci il path del file da caricare: ").strip()
                 album = carica_da_file(file_path)
+
                 if album is not None:
                     break
+            print(album)
 
         elif scelta == "2":
             if not album:
