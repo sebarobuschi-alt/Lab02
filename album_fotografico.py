@@ -44,17 +44,35 @@ def carica_da_file(file_path):
 
 def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
     """Aggiunge una foto all'album, creando l'anno al volo se non è ancora presente"""
-    anno_str = str(anno)
-    caratteristiche_foto = [codice, titolo, autore, mese]
-    if anno_str in album:
-        album[anno_str].append(caratteristiche_foto)
-    else:
-        album[anno_str] = [caratteristiche_foto]
+    try:
+        int_mese = int(mese)
+        if int_mese < 1 or int_mese> 12:
+            return None
+    except (ValueError,TypeError):
+        return None
+    for lista_foto in album:
+        for foto in lista_foto:
+            if foto[0] == codice:
+                return None
 
+    anno_str = str(anno)
+    try:
+        with open(file_path, 'r', encoding='utf-8'):
+            pass
         with open(file_path,'a', newline='') as file_csv:
             csvwriter = writer(file_csv)
             riga = [codice,titolo,autore,mese,anno_str]
             csvwriter.writerow(riga)
+    except(FileNotFoundError,OSError):
+        return None
+    caratteristiche_foto = [codice, titolo,autore ,mese]
+    if anno_str in album:
+        album[anno_str].append(caratteristiche_foto)
+    else:
+        album[anno_str] = [caratteristiche_foto]
+    return album
+
+
 
 
 def cerca_foto(album, codice):
