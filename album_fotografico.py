@@ -91,11 +91,11 @@ def cerca_foto(album, codice):
                 trovato = False
 
         if trovato:
-            risultato = f"{', '.join(caratteristiche_foto)}, {anno}"
-            break
+            risultato = None
 
         else:
-            risultato = None
+            risultato = f"{', '.join(caratteristiche_foto)}, {anno}"
+            break
     return risultato
 def elenco_foto_anno_per_titolo(album, anno):
     """Ordina i titoli delle foto di un dato anno in ordine alfabetico"""
