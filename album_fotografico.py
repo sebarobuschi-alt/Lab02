@@ -7,7 +7,6 @@ def carica_da_file(file_path):
     album = {}
     in_file_path = file_path
     try:
-        # L'uso di 'with' è consigliato perché chiude il file in automatico
         with open(file = in_file_path, mode = 'r') as infile:
             csvreader = reader(infile)
             next(csvreader, None)
