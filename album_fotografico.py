@@ -77,7 +77,6 @@ def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
 
 def cerca_foto(album, codice):
     """Cerca una foto nell'album dato il codice"""
-    lista_codici = []
     for anno in album:
         lista_foto = album[anno]
         for i in range(len(lista_foto)):
@@ -110,7 +109,7 @@ def elenco_foto_anno_per_titolo(album, anno):
         titoli_ordinati = sorted(titoli)
 
     else:
-        titoli = None
+        titoli_ordinati = None
     return titoli_ordinati
 
 
